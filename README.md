@@ -27,7 +27,7 @@ Installation
 Usage
 -----
 
-1.  Prepare two Excel sheets named `races` and `riders`. The `races` sheet must contain the columns `Race name` and `Race number`. The `riders` sheet must contain the columns `Team`, `Rider name` and `Value`. The first row of each sheet should be the column header. You can copy the data from the "Rennerslijst" provided on the wielermanager website.
+1.  Prepare two Excel sheets named `races` and `riders` in a file called "riders.xlsx". The `races` sheet must contain the columns `Race name` and `Race number`. The `riders` sheet must contain the columns `Team`, `Rider name` and `Value`. The first row of each sheet should be the column header. You can copy the data from the "Rennerslijst" provided on the wielermanager website.
 2.  Add the race names and numbers to the `races` sheet.
 3.  Add the rider names, teams and values to the `riders` sheet.
 4.  Run the script in a terminal or in an IDE.
