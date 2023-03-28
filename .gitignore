@@ -1,0 +1,17 @@
+# Ignore logs
+logs/
+
+# Ignore build files
+build/
+
+# Ignore git files
+.git/
+
+# Ignore pycache files
+_pycache_/
+
+# Ignore sensitive information
+config.json
+
+# Ignore IDE settings
+.vscode/

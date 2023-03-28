@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from openpyxl import load_workbook, Workbook
 import re
+import unicodedata
 
 # specify the year to check
 year = '2023'
@@ -53,6 +54,10 @@ for i, race_name in enumerate(race_names):
 # initialize row_num to 2
 row_num = 2
 
+def clean_name(text):
+    # Replace non-ASCII characters with closest ASCII equivalent
+    return unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('utf-8')
+
 # loop through each race in the races sheet and build the startlist
 for i, race_name in enumerate(race_names):
         # extract the race name and build the startlist URL
@@ -73,6 +78,15 @@ for i, race_name in enumerate(race_names):
         print('Startlist table not found for race', race_name)
         continue
 
+    startlist_rider_names = set() # create an empty set to store the rider names
+    # loop through each team in the startlist_v3 element
+    for team in startlist_v3.find_all('li', class_='team'):
+        # loop through each rider in the team
+        for rider in team.find_all('li'):
+            # get the rider name
+            startlist_rider_name = clean_name(rider.find_all('span')[-1].text.lower())
+            startlist_rider_names.add(startlist_rider_name)
+
     # loop through each rider in the riders sheet and check if they're in the startlist
     for j, rider in enumerate(riders_sheet.iter_rows(min_row=2, values_only=True)):
 
@@ -80,31 +94,26 @@ for i, race_name in enumerate(race_names):
         if rider[1] is None:
             continue
 
-        # extract the rider name, team and value and replace special characters with regular ones
-        rider_name = re.sub(r'[^\w\s]', '', rider[1]).lower().replace('.', '')
-        rider_team = rider[0].lower()
-        rider_value = rider[2]
+        # extract the rider name replace special characters with regular ones
+        rider_name = re.sub(r'[^a-zA-Z\s]', '', re.sub(r'[^\w\s.]', '', rider[1]).lower().replace('.', ''))
 
-        # initialize the dictionary to hold the results for the rider
-        rider_results = {
-            race_name: 1
-            if re.sub(r'[^a-zA-Z\s]', '', rider_name)
-            in re.sub(r'[^a-zA-Z\s]', '', startlist_v3.text.lower())
-            else 0
-        }          
-
+        rider_result = next(
+            (
+                1
+                for startlist_rider_name in startlist_rider_names
+                if rider_name in startlist_rider_name
+            ),
+            0,
+        )
         # write the results for the rider to the Startlist sheet
         Startlist_sheet.cell(row=row_num, column=1, value=rider_name)
-        Startlist_sheet.cell(row=row_num, column=i+3, value=rider_results[race_name])
+        Startlist_sheet.cell(row=row_num, column=i+3, value=rider_result)
 
         # count the number of races for the rider
         num_races = sum(cell.value == 1 for cell in Startlist_sheet[row_num][2:])
         Startlist_sheet.cell(row=row_num, column=2, value=num_races)
         riders_sheet.cell(row=row_num, column=4, value=num_races)
 
-
-
-        # increment the row number for the next rider
         row_num += 1
 
     # print the race name and the number of riders in the startlist
