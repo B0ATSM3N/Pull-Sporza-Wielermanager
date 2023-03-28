@@ -1,39 +1,40 @@
-Wielermanager Startlist Checker
-===============================
+Procyclingstats.com Startlist Builder
+=====================================
 
-The Wielermanager Startlist Checker is a Python script that checks if riders listed in an Excel sheet are participating in races of a specified year according to the startlists available on the website `www.procyclingstats.com`. The script retrieves the race names and numbers from an Excel sheet, builds the startlist URL for each race and extracts the startlist table for that race from the HTML content of the URL. It then loops through the rider names listed in another Excel sheet, cleans them and checks if they are present in the startlist table for each race. The script writes the rider names, the number of races they are participating in and the results (0 or 1) for each race to a new sheet in the same workbook. The script also updates the number of races each rider is participating in on the original rider sheet.
+This script builds a startlist for selected races on procyclingstats.com, based on a list of rider names, teams and values in an Excel file.
 
-Requirements
-------------
+The startlist is written to a new sheet in the same Excel file, with each rider's participation in each race indicated by a 1 or 0. The total number of races each rider is participating in is also calculated and added to the original rider sheet.
 
--   Python 3.x
--   requests module
--   BeautifulSoup module
--   openpyxl module
+**Sporza Wielermanager**
 
-Installation
-------------
+This was created to return a list based on the riders provided by the game sporza wielermanager. You can download the 'Rennerslijst' and rename it to riders.xlsx.
 
-1.  Clone this repository or download the zip file and extract it.
+**How to use**
 
-2.  Install the required modules using pip:
+1.  Ensure that the following modules are installed:
 
-    Copy code
+-   requests
+-   bs4 (BeautifulSoup)
+-   openpyxl
 
-    `pip install requests
-    pip install beautifulsoup4
-    pip install openpyxl`
+1.  Clone the repository or download the script and open it in your preferred Python IDE.
+2.  Edit the **race_names** list to include the names of the races you want to build a startlist for. The script is currently set up for the 2023 season, but this can be changed by editing the **year** variable.
+3.  Ensure that your rider data is stored in an Excel file with the following columns:
 
-Usage
------
+-   Column A: Rider team
+-   Column B: Rider name
+-   Column C: Rider value
 
-1.  Prepare two Excel sheets named `races` and `riders` in a file called "riders.xlsx". The `races` sheet must contain the columns `Race name` and `Race number`. The `riders` sheet must contain the columns `Team`, `Rider name` and `Value`. The first row of each sheet should be the column header. You can copy the data from the "Rennerslijst" provided on the wielermanager website.
-2.  Add the race names and numbers to the `races` sheet.
-3.  Add the rider names, teams and values to the `riders` sheet.
-4.  Run the script in a terminal or in an IDE.
-5.  The script will create a new sheet named `results` in the same workbook with the results of the startlist check.
+1.  Update the **wb** variable to point to your Excel file.
+2.  Run the script.
+3.  The startlist will be written to a new sheet called "Startlist" in the same Excel file. The number of races each rider is participating in will be added to the original rider sheet.
 
-Disclaimer
-----------
+**Limitations**
 
-The script may not work if the structure of the `www.procyclingstats.com` website changes. The script was last tested on 2023-03-20.
+-   The script relies on the HTML structure of procyclingstats.com and may break if the site's structure changes.
+-   The script currently only works for races on procyclingstats.com.
+-   The script assumes that rider names, teams and values are stored in an Excel file with the specified column structure.
+
+**Contact**
+
+If you have any questions or feedback, please feel free to contact me via my Github profile.
