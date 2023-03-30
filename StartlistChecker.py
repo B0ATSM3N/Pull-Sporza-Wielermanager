@@ -7,7 +7,7 @@ import unicodedata
 # specify the year to check
 year = '2023'
 
-# get the race names and numbers from the races sheet
+# define the race_names
 race_names = [
     "omloop-het-nieuwsblad",
     "kuurne-brussel-kuurne",
@@ -116,7 +116,7 @@ for i, race_name in enumerate(race_names):
 
         row_num += 1
 
-    # print the race name and the number of riders in the startlist
+    # print the race name of riders in the startlist
     print(race_name, ' startlist built')
 
 
